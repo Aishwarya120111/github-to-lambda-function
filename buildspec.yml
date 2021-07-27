@@ -9,9 +9,12 @@ phases:
   build:
     commands:
       - echo "Zipping deployment package..."
-      - 7z a deploy ./github-to-lambda-function/*
+      - cd lib
+      - zip -r9 ../deployment_package.zip .
+      - cd ..
+      - zip -g deployment_package.zip lambda_function.py
   post_build:
     commands:
       - echo "Updating lambda Function..."
-      - aws lambda update-function-code --function-name=github-to-lambda-function --zip-file=fileb://deploy.7z
+      - aws lambda update-function-code --function-name=github-to-lambda-function --zip-file=fileb://deployment_package.zip
       - echo "DONE!!"
